@@ -1,7 +1,7 @@
 services:
   - type: web
     name: student-dashboard
-    runtime: php
+    env: php
     region: frankfurt
     plan: free
     buildCommand: "composer install --no-dev --optimize-autoloader && php artisan config:cache && php artisan route:cache && npm install && npm run build"
