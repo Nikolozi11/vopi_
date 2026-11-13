@@ -7,6 +7,7 @@ use App\Models\Task;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class StudentDashboard extends Component
@@ -18,6 +19,9 @@ class StudentDashboard extends Component
     public string $start_time = '';
     public string $end_time = '';
 
+    // მაღვიძარას სტატუსი ჩექბოქსისთვის
+    public bool $pushEnabled = false;
+
     // AI ჩატი
     public bool $isChatOpen = false;
     public string $aiMessage = '';
@@ -27,6 +31,11 @@ class StudentDashboard extends Component
 
     public function mount(): void
     {
+        // ვამოწმებთ, აქვს თუ არა უკვე ჩართული შეტყობინებები
+        $this->pushEnabled = DB::table('push_subscriptions')
+            ->where('user_id', Auth::id())
+            ->exists();
+
         $this->chatHistory[] = [
             'sender' => 'ai',
             'text' => 'გამარჯობა! მე ვარ შენი სასწავლო ასისტენტი. მითხარი შენი გრაფიკი ან დავალებები და სიამოვნებით დაგეხმარები მათ განრიგში განაწილებაში!',
@@ -68,6 +77,43 @@ class StudentDashboard extends Component
         $task->update(['is_completed' => ! $task->is_completed]);
     }
 
+    // Push სუბსკრიფციის შენახვა (როცა ჩექბოქსს მონიშნავს)
+    public function savePushSubscription(array $subscription): void
+    {
+        if (!isset($subscription['endpoint'])) {
+            return;
+        }
+
+        DB::table('push_subscriptions')->updateOrInsert(
+            [
+                'user_id' => Auth::id(),
+                'endpoint' => $subscription['endpoint'],
+            ],
+            [
+                'public_key' => $subscription['keys']['p256dh'] ?? null,
+                'auth_token' => $subscription['keys']['auth'] ?? null,
+                'content_encoding' => 'aes128gcm',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]
+        );
+
+        $this->pushEnabled = true;
+    }
+
+    // Push სუბსკრიფციის გაუქმება (როცა ჩექბოქსს მოხსნის)
+    public function deletePushSubscription(?string $endpoint = null): void
+    {
+        $query = DB::table('push_subscriptions')->where('user_id', Auth::id());
+
+        if ($endpoint) {
+            $query->where('endpoint', $endpoint);
+        }
+
+        $query->delete();
+        $this->pushEnabled = false;
+    }
+
     public function sendMessageToAi(): void
     {
         $text = trim($this->aiMessage);
@@ -91,12 +137,10 @@ class StudentDashboard extends Component
             return;
         }
 
-        // ამოვაქვთ მომხმარებლის პროფილი
         $profile = StudentProfile::where('user_id', Auth::id())->first();
         
         $avgHours = $profile->avg_study_hours_per_day ?? 2;
         $avgMinutes = $profile->avg_minutes_per_subject ?? 45;
-        $hasTutor = ($profile->has_tutor ?? false) ? 'ჰყავს რეპეტიტორი' : 'არ ჰყავს რეპეტიტორი';
 
         $messages = [[
             'role' => 'system',
