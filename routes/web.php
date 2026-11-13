@@ -7,8 +7,12 @@ use App\Livewire\Auth\Login;
 use App\Http\Controllers\PushSubscriptionController;
 
 
-Route::get('/', Login::class)->name('login');
-Route::get('/register', Register::class)->name('register');
+Route::get('/', Login::class)->name('login')->group(function () {
+    Route::get('/profile', Profile::class)->name('profile');
+});
+Route::get('/register', Register::class)->name('register')->group(function () {
+    Route::get('/profile', Profile::class)->name('profile');
+});
 Route::post('/logout', function () {
     Auth::logout();
     request()->session()->invalidate();

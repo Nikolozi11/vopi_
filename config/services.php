@@ -41,4 +41,10 @@ return [
         'model' => env('OPENROUTER_MODEL', 'anthropic/claude-3.5-sonnet'), // ან შენთვის სასურველი OpenRouter მოდელი
     ],
 
+    'vapid' => [
+        'public' => env('VAPID_PUBLIC_KEY'),
+        'private' => env('VAPID_PRIVATE_KEY'),
+        'subject' => env('VAPID_SUBJECT'),
+    ],
+
 ];
