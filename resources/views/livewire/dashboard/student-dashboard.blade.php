@@ -84,6 +84,24 @@
                     </button>
                 </form>
             </div>
+
+            {{-- მაღვიძარას და ფუშ-შეტყობინებების ბარათი --}}
+            <div class="backdrop-blur-xl p-6 rounded-3xl border shadow-xl transition-colors"
+                 :class="darkMode ? 'bg-slate-900/90 border-slate-800/80 text-white shadow-2xl shadow-black/50' : 'bg-white border-slate-100 text-slate-900 shadow-xl'">
+                <h3 class="font-bold text-base mb-3 transition-colors" :class="darkMode ? 'text-white' : 'text-slate-900'">🔔 მაღვიძარა და შეტყობინებები</h3>
+                <p class="text-xs mb-4 transition-colors" :class="darkMode ? 'text-slate-400' : 'text-slate-600'">ჩართე მაღვიძარა, რომ დროის მოსვლისას ტელეფონზე შეტყობინება მიიღო.</p>
+                
+                <label class="flex items-center space-x-3 cursor-pointer">
+                    <input 
+                        type="checkbox" 
+                        wire:model="pushEnabled" 
+                        onchange="togglePushAlarm(this)"
+                        class="w-5 h-5 rounded border text-indigo-600 focus:ring-indigo-500 cursor-pointer"
+                        :class="darkMode ? 'border-slate-800 bg-slate-950' : 'border-slate-300 bg-white'"
+                    >
+                    <span class="text-sm font-medium" :class="darkMode ? 'text-white' : 'text-slate-900'">ფუშ მაღვიძარას ჩართვა</span>
+                </label>
+            </div>
         </div>
 
         {{-- მარჯვენა სვეტი: დღის განრიგი --}}
@@ -190,7 +208,7 @@
         </div>
     @endif
 
-    {{-- ჩატის ავტომატური ჩამოსქროლვა --}}
+    {{-- სკრიპტები: ჩატის სქროლი და ფუშ მაღვიძარას ლოგიკა --}}
     <script>
         document.addEventListener('livewire:init', () => {
             Livewire.hook('morph.updated', () => {
@@ -198,5 +216,62 @@
                 if (el) el.scrollTop = el.scrollHeight;
             });
         });
+
+        async function togglePushAlarm(checkbox) {
+            if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+                alert('შენს ბრაუზერს არ აქვს Push შეტყობინებების მხარდაჭერა.');
+                checkbox.checked = false;
+                return;
+            }
+
+            try {
+                const registration = await navigator.serviceWorker.ready;
+
+                if (checkbox.checked) {
+                    const permission = await Notification.requestPermission();
+                    if (permission !== 'granted') {
+                        alert('შეტყობინებების ნებართვა უარყოფილია ბრაუზერის მიერ.');
+                        checkbox.checked = false;
+                        return;
+                    }
+
+                    const publicVapidKey = "{{ config('services.vapid.public') }}";
+                    const convertedVapidKey = urlBase64ToUint8Array(publicVapidKey);
+
+                    const subscription = await registration.pushManager.subscribe({
+                        userVisibleOnly: true,
+                        applicationServerKey: convertedVapidKey
+                    });
+
+                    await @this.call('savePushSubscription', subscription.toJSON());
+                    console.log('მაღვიძარა ჩაირთო!');
+                } else {
+                    const subscription = await registration.pushManager.getSubscription();
+                    let endpoint = null;
+
+                    if (subscription) {
+                        endpoint = subscription.endpoint;
+                        await subscription.unsubscribe();
+                    }
+
+                    await @this.call('deletePushSubscription', endpoint);
+                    console.log('მაღვიძარა გაითიშა!');
+                }
+            } catch (error) {
+                console.error('მაღვიძარას შეცდომა:', error);
+                checkbox.checked = !checkbox.checked;
+            }
+        }
+
+        function urlBase64ToUint8Array(base64String) {
+            const padding = '='.repeat((4 - base64String.length % 4) % 4);
+            const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
+            const rawData = window.atob(base64);
+            const outputArray = new Uint8Array(rawData.length);
+            for (let i = 0; i < rawData.length; ++i) {
+                outputArray[i] = rawData.charCodeAt(i);
+            }
+            return outputArray;
+        }
     </script>
 </div>
