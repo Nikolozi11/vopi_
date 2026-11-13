@@ -89,7 +89,7 @@
             <div class="backdrop-blur-xl p-6 rounded-3xl border shadow-xl transition-colors"
                  :class="darkMode ? 'bg-slate-900/90 border-slate-800/80 text-white shadow-2xl shadow-black/50' : 'bg-white border-slate-100 text-slate-900 shadow-xl'">
                 <h3 class="font-bold text-base mb-3 transition-colors" :class="darkMode ? 'text-white' : 'text-slate-900'">🔔 მაღვიძარა და შეტყობინებები</h3>
-                <p class="text-xs mb-4 transition-colors" :class="darkMode ? 'text-slate-400' : 'text-slate-600'">ჩართე მაღვიძარა, რომ დროის მოსვლისას ტელეფონზე შეტყობინება მიიღო.</p>
+                <p class="text-xs mb-4 transition-colors" :class="darkMode ? 'text-slate-400' : 'text-slate-600'">ჩართე მაღვიძარა, რომ ტელეფონიდან გასვლისასაც მიიღო შეტყობინება.</p>
                 
                 <label class="flex items-center space-x-3 cursor-pointer">
                     <input 
@@ -208,7 +208,7 @@
         </div>
     @endif
 
-    {{-- სკრიპტები: ჩატის სქროლი და ფუშ მაღვიძარას ლოგიკა --}}
+    {{-- სკრიპტები --}}
     <script>
         document.addEventListener('livewire:init', () => {
             Livewire.hook('morph.updated', () => {
@@ -218,14 +218,16 @@
         });
 
         async function togglePushAlarm(checkbox) {
-            if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
-                alert('შენს ბრაუზერს არ აქვს Push შეტყობინებების მხარდაჭერა.');
-                checkbox.checked = false;
-                return;
-            }
-
             try {
-                const registration = await navigator.serviceWorker.ready;
+                if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+                    alert('შენს ბრაუზერს არ აქვს Push შეტყობინებების მხარდაჭერა.');
+                    checkbox.checked = false;
+                    return;
+                }
+
+                const registration = await navigator.serviceWorker.ready.catch(err => {
+                    throw new Error('Service Worker მზად არ არის: ' + err.message);
+                });
 
                 if (checkbox.checked) {
                     const permission = await Notification.requestPermission();
@@ -236,6 +238,12 @@
                     }
 
                     const publicVapidKey = "{{ config('services.vapid.public') }}";
+                    if (!publicVapidKey) {
+                        alert('VAPID საჯარო გასაღები არ არის კონფიგურირებული სერვერზე!');
+                        checkbox.checked = false;
+                        return;
+                    }
+
                     const convertedVapidKey = urlBase64ToUint8Array(publicVapidKey);
 
                     const subscription = await registration.pushManager.subscribe({
@@ -244,7 +252,7 @@
                     });
 
                     await @this.call('savePushSubscription', subscription.toJSON());
-                    console.log('მაღვიძარა ჩაირთო!');
+                    alert('მაღვიძარა წარმატებით ჩაირთო და სუბსკრიფცია შენახულია ბაზაში!');
                 } else {
                     const subscription = await registration.pushManager.getSubscription();
                     let endpoint = null;
@@ -255,10 +263,11 @@
                     }
 
                     await @this.call('deletePushSubscription', endpoint);
-                    console.log('მაღვიძარა გაითიშა!');
+                    alert('მაღვიძარა გათიშულია!');
                 }
             } catch (error) {
-                console.error('მაღვიძარას შეცდომა:', error);
+                alert('შეცდომა: ' + error.message);
+                console.error(error);
                 checkbox.checked = !checkbox.checked;
             }
         }
