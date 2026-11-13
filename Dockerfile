@@ -6,6 +6,8 @@ RUN apt-get update && apt-get install -y \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
+    libgmp-dev \
+    libzip-dev \
     zip \
     unzip
 
@@ -13,7 +15,7 @@ RUN apt-get update && apt-get install -y \
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get install -y nodejs
 
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
+RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd gmp zip
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
