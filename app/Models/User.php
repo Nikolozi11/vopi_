@@ -42,4 +42,8 @@ public function activities()
 {
     return $this->hasMany(ExtracurricularActivity::class);
 }
+public function pushSubscriptions()
+{
+    return $this->hasMany(PushSubscription::class);
+}
 }

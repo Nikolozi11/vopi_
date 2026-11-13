@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Schedule;
 use App\Models\Task;
 use Minishlink\LaravelWebPush\Facades\WebPush;
 
+Schedule::command('tasks:send-alarms')->everyMinute();
+
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
