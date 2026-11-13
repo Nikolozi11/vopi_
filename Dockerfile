@@ -9,6 +9,10 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip
 
+# Node.js-ის და NPM-ის ინსტალაცია (Vite / Tailwind სტილების ასაწყობად)
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs
+
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -17,6 +21,9 @@ WORKDIR /var/www/html
 COPY . /var/www/html
 
 RUN composer install --no-dev --optimize-autoloader
+
+# NPM პაკეტების დაყენება და პროექტის (Tailwind/Vite) აწყობა
+RUN npm install && npm run build
 
 ENV APACHE_DOCUMENT_ROOT /var/www/html/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf

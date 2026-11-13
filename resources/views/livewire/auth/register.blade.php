@@ -16,7 +16,7 @@
              :class="darkMode ? 'bg-slate-900/90 border-slate-800/80 text-white shadow-2xl shadow-black/50' : 'bg-white border-slate-100 text-slate-900 shadow-xl'">
 
             {{-- ეტაპების ინდიკატორი (მოსწავლისთვის) --}}
-            @if(role === 'student')
+            @if($role === 'student')
                 <div class="mb-6 flex items-center justify-center space-x-4">
                     <div class="flex items-center space-x-2">
                         <span class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold {{ $step === 1 ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/30' : '' }}"
