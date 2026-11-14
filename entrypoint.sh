@@ -1,13 +1,13 @@
 #!/bin/sh
 
-# ვასწორებთ storage და cache ფოლდერების უფლებებს, რომ ლოგებმა და სესიებმა იმუშაოს
+# 1. ვასწორებთ უფლებებს, რომ ვებ-სერვერმა შეძლოს storage-ში წერა
 chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
-# ვწმენდთ ქეშს და ვუშვებთ მიგრაციებს
+# 2. ვწმენდთ ქეშს და ვუშვებთ მიგრაციებს
 php artisan config:clear
 php artisan route:clear
 php artisan migrate --force
 
-# ვრთავთ აპლიკაციას
+# 3. ვრთავთ აპლიკაციას
 apache2-foreground

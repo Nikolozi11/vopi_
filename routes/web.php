@@ -5,6 +5,17 @@ use App\Livewire\Auth\Register;
 use App\Livewire\Dashboard\StudentDashboard;
 use App\Http\Controllers\PushSubscriptionController;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Artisan;
+
+Route::get('/reset-database', function () {
+    // ვშლით ბაზაში არსებულ ყველა ცხრილს
+    Artisan::call('db:wipe', ['--force' => true]);
+    
+    // ვუშვებთ მიგრაციებს თავიდან
+    Artisan::call('migrate', ['--force' => true]);
+    
+    return '<h3>ბაზა სრულად გასუფთავდა და მიგრაციები თავიდან გაეშვა!</h3>';
+});
 
 Route::get('/', Login::class)->name('login');
 Route::get('/register', Register::class)->name('register');
