@@ -6,21 +6,8 @@ use App\Livewire\Dashboard\StudentDashboard;
 use App\Http\Controllers\PushSubscriptionController;
 use Illuminate\Support\Facades\Auth;
 
-// მთავარი გვერდი: თუ უკვე შესულია, გადაამისამართებს დეშბორდზე
-Route::get('/', function () {
-    if (auth()->check()) {
-        return redirect()->route('dashboard');
-    }
-    return app(Login::class);
-});
-
-// რეგისტრაციის გვერდი: თუ უკვე შესულია, გადაამისამართებს დეშბორდზე
-Route::get('/register', function () {
-    if (auth()->check()) {
-        return redirect()->route('dashboard');
-    }
-    return app(Register::class);
-})->name('register');
+Route::get('/', Login::class)->name('login');
+Route::get('/register', Register::class)->name('register');
 
 Route::post('/logout', function () {
     Auth::logout();
