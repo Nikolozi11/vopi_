@@ -12,14 +12,14 @@ return new class extends Migration
     public function up(): void
 {
     Schema::create('push_subscriptions', function (Blueprint $table) {
-        $table->id();
-        $table->foreignId('user_id')->constrained()->onDelete('cascade');
-        $table->text('endpoint');
-        $table->string('publicKey')->nullable();
-        $table->string('authToken')->nullable();
-        $table->string('contentEncoding')->nullable();
-        $table->timestamps();
-    });
+    $table->id();
+    $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+    $table->text('endpoint');
+    $table->text('public_key')->nullable();   // <--- ეს აუცილებლად უნდა იყოს
+    $table->text('auth_token')->nullable();   // <--- ესეც
+    $table->string('content_encoding')->nullable();
+    $table->timestamps();
+});
 }
 
     /**
