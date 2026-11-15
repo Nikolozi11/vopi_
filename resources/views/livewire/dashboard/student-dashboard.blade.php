@@ -21,7 +21,7 @@
             <div class="border border-indigo-500/20 text-white rounded-3xl p-6 shadow-xl transition-colors"
                  :class="darkMode ? 'bg-gradient-to-br from-indigo-950 via-slate-900 to-slate-900 shadow-black/40' : 'bg-gradient-to-br from-indigo-900 to-indigo-700 shadow-lg'">
                 <h3 class="font-bold text-base mb-2 flex items-center space-x-2 text-indigo-200">
-                    <span>🤖</span> <span>შენი AI პროფილი</span>
+                    <img src="/images/logo.png" alt="AI Assistant" class="w-6 h-6"> <span>შენი AI პროფილი</span>
                 </h3>
                 <div class="text-xs text-indigo-100 space-y-3 mt-4">
                     <div class="flex justify-between border-b pb-2.5 transition-colors" :class="darkMode ? 'border-slate-800' : 'border-indigo-600/50'">
@@ -79,16 +79,26 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 active:scale-[0.98] text-white text-sm font-semibold py-3.5 rounded-xl shadow-lg shadow-indigo-600/30 transition">
-                        + კალენდარში დამატება
-                    </button>
+                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 active:scale-[0.98] text-white text-sm font-semibold py-3.5 rounded-xl shadow-lg shadow-indigo-600/30 transition flex items-center justify-center gap-2">
+    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+        <path d="M5 12h14"/>
+        <path d="M12 5v14"/>
+    </svg>
+    კალენდარში დამატება
+</button>
                 </form>
             </div>
 
             {{-- მაღვიძარას და ფუშ-შეტყობინებების ბარათი --}}
             <div class="backdrop-blur-xl p-6 rounded-3xl border shadow-xl transition-colors"
                  :class="darkMode ? 'bg-slate-900/90 border-slate-800/80 text-white shadow-2xl shadow-black/50' : 'bg-white border-slate-100 text-slate-900 shadow-xl'">
-                <h3 class="font-bold text-base mb-3 transition-colors" :class="darkMode ? 'text-white' : 'text-slate-900'">🔔 მაღვიძარა და შეტყობინებები</h3>
+                 <h3 class="font-bold text-base mb-3 transition-colors flex items-center gap-2" :class="darkMode ? 'text-white' : 'text-slate-900'">
+    <svg class="w-5 h-5 text-indigo-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+        <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
+        <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+    </svg>
+    მაღვიძარა და შეტყობინებები
+</h3>
                 <p class="text-xs mb-4 transition-colors" :class="darkMode ? 'text-slate-400' : 'text-slate-600'">ჩართე მაღვიძარა, რომ ტელეფონიდან გასვლისასაც მიიღო შეტყობინება.</p>
                 
                 <label class="flex items-center space-x-3 cursor-pointer">
@@ -108,7 +118,15 @@
         <div class="backdrop-blur-xl rounded-3xl border shadow-xl p-6 lg:col-span-2 transition-colors"
              :class="darkMode ? 'bg-slate-900/90 border-slate-800/80 text-white shadow-2xl shadow-black/50' : 'bg-white border-slate-100 text-slate-900 shadow-xl'">
             <h3 class="font-bold text-base sm:text-lg mb-6 flex items-center justify-between transition-colors" :class="darkMode ? 'text-white' : 'text-slate-900'">
-                <span>📅 დავალებებისა და გაკვეთილების განრიგი</span>
+                <span class="inline-flex items-center gap-2">
+    <svg class="w-5 h-5 text-indigo-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+        <path d="M8 2v4"/>
+        <path d="M16 2v4"/>
+        <rect width="18" height="18" x="3" y="4" rx="2"/>
+        <path d="M3 10h18"/>
+    </svg>
+    დავალებებისა და გაკვეთილების განრიგი
+</span>
                 <span class="text-xs font-normal transition-colors" :class="darkMode ? 'text-slate-400' : 'text-slate-500'">{{ now()->format('Y-m-d') }}</span>
             </h3>
 
@@ -130,9 +148,13 @@
                                 </p>
                             @endif
 
-                            <p class="text-xs mt-1.5 transition-colors" :class="darkMode ? 'text-slate-500' : 'text-slate-400'">
-                                🕒 {{ \Carbon\Carbon::parse($task->start_time)->format('Y-m-d H:i') }} - {{ \Carbon\Carbon::parse($task->end_time)->format('H:i') }}
-                            </p>
+                            <p class="text-xs mt-1.5 transition-colors flex items-center gap-1.5" :class="darkMode ? 'text-slate-500' : 'text-slate-400'">
+    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="12" r="10"/>
+        <polyline points="12 6 12 12 16 14"/>
+    </svg>
+    {{ \Carbon\Carbon::parse($task->start_time)->format('Y-m-d H:i') }} - {{ \Carbon\Carbon::parse($task->end_time)->format('H:i') }}
+</p>
                         </div>
 
                         <span class="px-3 py-1 rounded-full text-xs font-semibold border"
@@ -165,7 +187,12 @@
 
     {{-- მცურავი AI ჩატის ღილაკი --}}
     <button wire:click="toggleChat" class="fixed bottom-6 right-6 h-14 w-14 rounded-full bg-indigo-600 text-white shadow-2xl shadow-indigo-600/50 hover:bg-indigo-500 flex items-center justify-center text-2xl transition transform hover:scale-105 z-50">
-        💬
+        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+    <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>
+    <path d="M8 12h.01"/>
+    <path d="M12 12h.01"/>
+    <path d="M16 12h.01"/>
+</svg>
     </button>
 
     {{-- AI ჩატი --}}
@@ -174,7 +201,7 @@
              :class="darkMode ? 'bg-slate-900 border-slate-800 shadow-black/60' : 'bg-white border-slate-200 shadow-xl'">
             <div class="bg-indigo-600 p-4 text-white flex justify-between items-center shadow-md">
                 <div class="flex items-center space-x-2">
-                    <span class="text-xl">🤖</span>
+                    <img src="/images/logo.png" alt="AI Assistant" class="w-6 h-6">
                     <span class="font-bold text-sm">AI ასისტენტი & დაგეგმვა</span>
                 </div>
                 <button wire:click="toggleChat" class="text-white hover:text-slate-200 text-xl font-bold">&times;</button>
@@ -201,9 +228,12 @@
 
             <div class="p-3 border-t flex space-x-2 transition-colors" :class="darkMode ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200'">
                 <input type="text" wire:model="aiMessage" wire:keydown.enter="sendMessageToAi" placeholder="ჩაწერე დავალება ან გრაფიკი..." class="flex-1 px-4 py-2.5 border rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors" :class="darkMode ? 'bg-slate-950 border-slate-800 text-white placeholder-slate-600' : 'bg-slate-50 border-slate-200 text-slate-900 placeholder-slate-400'">
-                <button wire:click="sendMessageToAi" wire:loading.attr="disabled" wire:target="sendMessageToAi" class="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white px-4 py-2.5 rounded-xl text-xs font-semibold shadow-md transition">
-                    გაგზავნა
-                </button>
+                <button wire:click="sendMessageToAi" wire:loading.attr="disabled" wire:target="sendMessageToAi" title="გაგზავნა" class="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white p-2.5 rounded-xl shadow-md transition flex items-center justify-center cursor-pointer">
+    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+        <path d="m22 2-7 20-4-9-9-4Z"/>
+        <path d="M22 2 11 13"/>
+    </svg>
+</button>
             </div>
         </div>
     @endif

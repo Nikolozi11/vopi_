@@ -3,10 +3,7 @@
     
     <!-- ლოგო / სათაური -->
     <div class="sm:mx-auto sm:w-full sm:max-w-md text-center mb-8">
-        <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl border text-2xl font-bold mb-3 shadow-sm transition-colors"
-             :class="darkMode ? 'bg-indigo-600/10 border-indigo-500/20 text-indigo-400' : 'bg-indigo-50 border-indigo-100 text-indigo-600'">
-            V
-        </div>
+        <img src="/images/logo.png" alt="Vopi Logo" class="inline-flex items-center justify-center w-16 h-16">
         <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight transition-colors"
             :class="darkMode ? 'text-white' : 'text-slate-900'">
             მოგესალმები ისევ 👋
@@ -76,7 +73,7 @@
                 <div>
                     <button type="submit" 
                         class="w-full py-4 px-4 bg-indigo-600 hover:bg-indigo-500 active:scale-[0.98] text-white font-semibold rounded-xl shadow-lg shadow-indigo-600/30 transition-all duration-200 text-base">
-                        შესვლა დეშბორდში ✨
+                        შესვლა
                     </button>
                 </div>
             </form>

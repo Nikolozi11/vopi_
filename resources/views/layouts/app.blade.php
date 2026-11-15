@@ -42,11 +42,8 @@
                 
                 <div class="flex items-center space-x-3">
                     <a href="{{ route('dashboard') }}" class="flex items-center space-x-3">
-                        <div class="h-10 w-10 rounded-2xl border flex items-center justify-center font-bold shadow-sm transition-colors"
-                             :class="darkMode ? 'bg-indigo-600/10 border-indigo-500/20 text-indigo-400' : 'bg-indigo-50 border-indigo-200 text-indigo-600'">
-                            🎓
-                        </div>
-                        <div>
+                        <img src="/images/logo.png" alt="Vopi Logo" class="h-10 w-10">
+                            <div>
                             <h1 class="text-base sm:text-lg font-extrabold transition-colors" :class="darkMode ? 'text-white' : 'text-slate-900'">Vopi Platform</h1>
                             <p class="text-xs transition-colors" :class="darkMode ? 'text-slate-400' : 'text-slate-500'">
                                 @auth მოგესალმები, {{ auth()->user()->name }} @else სტუდენტური პლატფორმა @endauth
@@ -61,17 +58,40 @@
                         class="p-2.5 rounded-xl border transition-all flex items-center justify-center shadow-sm cursor-pointer"
                         :class="darkMode ? 'border-slate-800 bg-slate-950 text-slate-300 hover:border-indigo-500' : 'border-slate-200 bg-slate-100 text-slate-600 hover:border-indigo-500'"
                         title="თემის შეცვლა">
-                        <span x-show="!darkMode" class="text-lg">🌙</span>
-                        <span x-show="darkMode" class="text-lg" style="display: none;">☀️</span>
+                        <!-- მთვარის აიქონი (ჩანს, როცა darkMode არ არის აქტიური) -->
+<span x-show="!darkMode" class="inline-flex items-center justify-center">
+    <svg class="w-5 h-5 text-indigo-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+    </svg>
+</span>
+
+<!-- მზის აიქონი (ჩანს, როცა darkMode აქტიურია) -->
+<span x-show="darkMode" class="inline-flex items-center justify-center" style="display: none;">
+    <svg class="w-5 h-5 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="12" r="4"/>
+        <path d="M12 2v2"/>
+        <path d="M12 20v2"/>
+        <path d="m4.93 4.93 1.41 1.41"/>
+        <path d="m17.66 17.66 1.41 1.41"/>
+        <path d="M2 12h2"/>
+        <path d="M20 12h2"/>
+        <path d="m6.34 17.66-1.41 1.41"/>
+        <path d="m19.07 4.93-1.41 1.41"/>
+    </svg>
+</span>
                     </button>
 
                     @auth
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
-                            <button type="submit" class="text-xs font-semibold px-3.5 py-2 rounded-xl border transition"
-                                    :class="darkMode ? 'bg-rose-500/10 text-rose-400 border-rose-500/20 hover:bg-rose-500/25' : 'bg-rose-50 text-rose-600 border-rose-200 hover:bg-rose-100'">
-                                გამოსვლა
-                            </button>
+                            <button type="submit" title="გამოსვლა" class="p-2.5 rounded-xl border transition flex items-center justify-center"
+    :class="darkMode ? 'bg-rose-500/10 text-rose-400 border-rose-500/20 hover:bg-rose-500/25' : 'bg-rose-50 text-rose-600 border-rose-200 hover:bg-rose-100'">
+    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+        <polyline points="16 17 21 12 16 7"/>
+        <line x1="21" x2="9" y1="12" y2="12"/>
+    </svg>
+</button>
                         </form>
                     @endauth
                 </div>
@@ -110,8 +130,13 @@
         }
     }" x-show="isInstallable" class="fixed bottom-6 left-6 z-50" style="display: none;">
         <button @click="installApp()" class="px-4 py-3 bg-indigo-600 hover:bg-indigo-500 active:scale-[0.98] text-white rounded-2xl shadow-2xl shadow-indigo-600/50 font-semibold text-xs flex items-center gap-2 transition cursor-pointer">
-            <span>📲 Vopi-ს აპლიკაციის გადმოწერა</span>
-        </button>
+    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="7 10 12 15 17 10"/>
+        <line x1="12" x2="12" y1="3" y2="15"/>
+    </svg>
+    Vopi-ს აპლიკაციის გადმოწერა
+</button>
     </div>
 
     @livewireScripts
