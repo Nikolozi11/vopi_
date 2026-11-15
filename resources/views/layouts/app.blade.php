@@ -12,14 +12,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Vopi - სტუდენტური პორტალი</title>
-
     {{-- PWA პარამეტრები და მანიფესტი --}}
     <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#4f46e5">
+    <meta name="theme-color" content="#030712">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="/images/icon-192.png">
+
+    <!-- ძირითადი SEO მეტა ტეგები -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ $title ?? 'Vopi Platform - სტუდენტური პლატფორმა' }}</title>
+    <meta name="description" content="{{ $description ?? 'შექმენით ანგარიში და მართეთ სასწავლო პროცესი AI-სთან ერთად Vopi Platform-ზე.' }}">
+
+    <!-- Open Graph / Facebook / WhatsApp / Discord / Telegram -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="{{ $title ?? 'Vopi Platform - სტუდენტური პლატფორმა' }}">
+    <meta property="og:description" content="{{ $description ?? 'შექმენით ანგარიში და მართეთ სასწავლო პროცესი AI-სთან ერთად Vopi Platform-ზე.' }}">
+    <meta property="og:image" content="{{ asset('images/banner.png') }}">
+    <meta property="og:site_name" content="Vopi Platform">
+    <meta property="og:locale" content="ka_GE">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="{{ url()->current() }}">
+    <meta name="twitter:title" content="{{ $title ?? 'Vopi Platform - სტუდენტური პლატფორმა' }}">
+    <meta name="twitter:description" content="{{ $description ?? 'შექმენით ანგარიში და მართეთ სასწავლო პროცესი AI-სთან ერთად Vopi Platform-ზე.' }}">
+    <meta name="twitter:image" content="{{ asset('images/banner.png') }}">
 
     <script>
         if ('serviceWorker' in navigator) {

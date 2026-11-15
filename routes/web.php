@@ -5,9 +5,12 @@ use App\Livewire\Auth\Register;
 use App\Livewire\Dashboard\StudentDashboard;
 use App\Http\Controllers\PushSubscriptionController;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Middleware\CheckRole;
 
-Route::get('/', Login::class)->name('login');
-Route::get('/register', Register::class)->name('register');
+Route::middleware('guest')->group(function () {
+    Route::get('/', Login::class)->name('login');
+    Route::get('/register', Register::class)->name('register');
+});
 
 Route::post('/logout', function () {
     Auth::logout();
