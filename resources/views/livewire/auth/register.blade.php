@@ -123,96 +123,32 @@
                 </div>
 
             @else
+
                 {{-- STEP 2: AI ONBOARDING --}}
                 <div class="space-y-5">
                     <div class="border rounded-2xl p-4 flex items-start space-x-3 transition-colors" :class="darkMode ? 'bg-indigo-950/30 border-indigo-500/20 text-indigo-200' : 'bg-indigo-50/70 border-indigo-100 text-indigo-900'">
                         <span class="text-2xl">🤖</span>
-                        <p class="text-xs sm:text-sm leading-relaxed">
-                            დაამატე შენი ყველა რეპეტიტორი და წრე სათითაოდ, რათა AI-მ დღის გეგმა ზუსტად გათვალოს!
-                        </p>
+                        <p class="text-xs sm:text-sm leading-relaxed">მიუთითე სკოლის, რეპეტიტორისა და წრეების დღეები და საათები, რათა AI-მ დღის გეგმა ზუსტად გათვალოს. ყველაფრის შეცვლა მერე პროფილიდან შეგიძლია.</p>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs font-semibold mb-2 transition-colors" :class="darkMode ? 'text-slate-400' : 'text-slate-600'">საშუალო სწავლის დრო (სთ/დღე)</label>
-                            <input type="number" wire:model="avg_study_hours_per_day" min="1" max="12" class="w-full px-4 py-3 border rounded-xl text-base transition-colors" :class="darkMode ? 'bg-slate-950/60 border-slate-800 text-white' : 'bg-slate-50 border-slate-200 text-slate-900'">
+                            <label class="block text-xs font-semibold mb-2" :class="darkMode ? 'text-slate-400' : 'text-slate-600'">საშუალო სწავლის დრო (სთ/დღე)</label>
+                            <input type="number" wire:model="avg_study_hours_per_day" min="1" max="12" class="w-full px-4 py-3 border rounded-xl text-base" :class="darkMode ? 'bg-slate-950/60 border-slate-800 text-white' : 'bg-slate-50 border-slate-200 text-slate-900'">
+                            @error('avg_study_hours_per_day') <span class="text-xs text-rose-500">{{ $message }}</span> @enderror
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold mb-2 transition-colors" :class="darkMode ? 'text-slate-400' : 'text-slate-600'">დრო 1 საგანზე (წუთი)</label>
-                            <input type="number" wire:model="avg_minutes_per_subject" min="15" max="180" class="w-full px-4 py-3 border rounded-xl text-base transition-colors" :class="darkMode ? 'bg-slate-950/60 border-slate-800 text-white' : 'bg-slate-50 border-slate-200 text-slate-900'">
+                            <label class="block text-xs font-semibold mb-2" :class="darkMode ? 'text-slate-400' : 'text-slate-600'">დრო 1 საგანზე (წუთი)</label>
+                            <input type="number" wire:model="avg_minutes_per_subject" min="15" max="180" class="w-full px-4 py-3 border rounded-xl text-base" :class="darkMode ? 'bg-slate-950/60 border-slate-800 text-white' : 'bg-slate-50 border-slate-200 text-slate-900'">
+                            @error('avg_minutes_per_subject') <span class="text-xs text-rose-500">{{ $message }}</span> @enderror
                         </div>
                     </div>
 
-                    {{-- სექცია 1: წრეები / ჰობი --}}
-                    <div class="border-t pt-4 transition-colors" :class="darkMode ? 'border-slate-800' : 'border-slate-100'">
-                        <div class="flex justify-between items-center mb-3">
-                            <label class="text-xs font-bold uppercase tracking-wider transition-colors" :class="darkMode ? 'text-slate-300' : 'text-slate-700'">🎯 წრეები / ჰობი</label>
-                            <button type="button" wire:click="addActivityInput" class="text-xs font-semibold transition-colors" :class="darkMode ? 'text-indigo-400 hover:text-indigo-300' : 'text-indigo-600 hover:text-indigo-500'">
-                                + დამატება
-                            </button>
-                        </div>
+                    @include('livewire.partials.profile-fields')
 
-                        <div class="space-y-3">
-                            @foreach($activities as $index => $act)
-                                <div class="flex items-center space-x-2 p-2.5 rounded-xl border transition-colors" :class="darkMode ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'">
-                                    <input type="text" wire:model="activities.{{ $index }}.name" placeholder="მაგ: გიტარა, ცურვა..." class="flex-1 px-3 py-2 border rounded-lg text-sm transition-colors" :class="darkMode ? 'bg-slate-900 border-slate-800 text-white' : 'bg-white border-slate-200 text-slate-900'">
-                                    <input type="number" wire:model="activities.{{ $index }}.days_per_week" placeholder="დღე/კვ" min="1" max="7" class="w-20 px-2 py-2 border rounded-lg text-sm text-center transition-colors" :class="darkMode ? 'bg-slate-900 border-slate-800 text-white' : 'bg-white border-slate-200 text-slate-900'">
-                                    @if(count($activities) > 1)
-                                        <button type="button" wire:click="removeActivityInput({{ $index }})" class="text-rose-500 hover:text-rose-600 font-bold px-2 text-lg">&times;</button>
-                                    @endif
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-
-                    {{-- სექცია 2: რეპეტიტორები --}}
-                    <div class="border-t pt-4 transition-colors" :class="darkMode ? 'border-slate-800' : 'border-slate-100'">
-                        <div class="flex items-center justify-between mb-3">
-                            <label class="flex items-center space-x-3 cursor-pointer select-none">
-                                <input type="checkbox" wire:model.live="has_tutor" class="w-4 h-4 rounded border text-indigo-600 focus:ring-indigo-500" :class="darkMode ? 'border-slate-800 bg-slate-950' : 'border-slate-300 bg-slate-50'">
-                                <span class="text-xs font-bold uppercase tracking-wider transition-colors" :class="darkMode ? 'text-slate-300' : 'text-slate-700'">👨‍🏫 გყავთ რეპეტიტორები?</span>
-                            </label>
-                            @if($has_tutor)
-                                <button type="button" wire:click="addTutorInput" class="text-xs font-semibold transition-colors" :class="darkMode ? 'text-indigo-400 hover:text-indigo-300' : 'text-indigo-600 hover:text-indigo-500'">
-                                    + დამატება
-                                </button>
-                            @endif
-                        </div>
-
-                        @if($has_tutor)
-                            <div class="space-y-3">
-                                @foreach($tutors as $index => $tutor)
-                                    <div class="p-3 rounded-xl border space-y-2.5 transition-colors" :class="darkMode ? 'bg-slate-950/60 border-slate-800' : 'bg-slate-50 border-slate-200'">
-                                        <div class="flex items-center space-x-2">
-                                            <input type="text" wire:model="tutors.{{ $index }}.subject" placeholder="საგანის სახელი (მაგ: მათემატიკა)" class="flex-1 px-3 py-2 border rounded-lg text-sm transition-colors" :class="darkMode ? 'bg-slate-900 border-slate-800 text-white' : 'bg-white border-slate-200 text-slate-900'">
-                                            @if(count($tutors) > 1)
-                                                <button type="button" wire:click="removeTutorInput({{ $index }})" class="text-rose-500 hover:text-rose-600 font-bold px-2 text-lg">&times;</button>
-                                            @endif
-                                        </div>
-                                        <div class="grid grid-cols-2 gap-2 text-xs">
-                                            <div>
-                                                <span class="text-[11px] mb-1 block transition-colors" :class="darkMode ? 'text-slate-400' : 'text-slate-500'">კვირაში რამდენჯერ:</span>
-                                                <input type="number" wire:model="tutors.{{ $index }}.sessions_per_week" min="1" max="7" class="w-full px-3 py-2 border rounded-lg transition-colors" :class="darkMode ? 'bg-slate-900 border-slate-800 text-white' : 'bg-white border-slate-200 text-slate-900'">
-                                            </div>
-                                            <div>
-                                                <span class="text-[11px] mb-1 block transition-colors" :class="darkMode ? 'text-slate-400' : 'text-slate-500'">ხანგრძლივობა (სთ):</span>
-                                                <input type="number" step="0.5" wire:model="tutors.{{ $index }}.hours_per_session" min="0.5" max="5" class="w-full px-3 py-2 border rounded-lg transition-colors" :class="darkMode ? 'bg-slate-900 border-slate-800 text-white' : 'bg-white border-slate-200 text-slate-900'">
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
-                        @endif
-                    </div>
-
-                    {{-- ნავიგაციის ღილაკები --}}
-                    <div class="flex items-center space-x-3 pt-4 border-t transition-colors" :class="darkMode ? 'border-slate-800' : 'border-slate-100'">
-                        <button type="button" wire:click="previousStep" class="w-1/3 border font-semibold py-3.5 px-4 rounded-xl transition text-sm" :class="darkMode ? 'bg-slate-900 border-slate-800 hover:bg-slate-800 text-slate-300' : 'bg-slate-100 border-slate-200 hover:bg-slate-200 text-slate-700'">
-                            ← უკან
-                        </button>
-                        <button type="button" wire:click="register" class="w-2/3 bg-indigo-600 hover:bg-indigo-500 active:scale-[0.98] text-white font-semibold py-3.5 px-4 rounded-xl shadow-lg shadow-indigo-600/30 transition text-sm">
-                            დასრულება ✨
-                        </button>
+                    <div class="flex items-center space-x-3 pt-4 border-t" :class="darkMode ? 'border-slate-800' : 'border-slate-100'">
+                        <button type="button" wire:click="previousStep" class="w-1/3 border font-semibold py-3.5 px-4 rounded-xl text-sm" :class="darkMode ? 'bg-slate-900 border-slate-800 text-slate-300' : 'bg-slate-100 border-slate-200 text-slate-700'">← უკან</button>
+                        <button type="button" wire:click="register" class="w-2/3 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3.5 px-4 rounded-xl shadow-lg shadow-indigo-600/30 text-sm">დასრულება ✨</button>
                     </div>
                 </div>
             @endif

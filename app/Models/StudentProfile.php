@@ -13,10 +13,15 @@ class StudentProfile extends Model
         'user_id',
         'avg_study_hours_per_day',
         'avg_minutes_per_subject',
-        'extracurricular_activities',
         'has_tutor',
-        'tutor_sessions_per_week',
-        'tutor_hours_per_session',
+        'school_start_time',
+        'school_end_time',
+        'school_days',
+    ];
+
+    protected $casts = [
+        'has_tutor' => 'boolean',
+        'school_days' => 'array',
     ];
 
     public function user()

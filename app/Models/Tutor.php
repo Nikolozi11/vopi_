@@ -9,7 +9,9 @@ class Tutor extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'subject', 'sessions_per_week', 'hours_per_session'];
+    protected $fillable = ['user_id', 'subject', 'schedule', 'sessions_per_week', 'hours_per_session'];
+
+    protected $casts = ['schedule' => 'array'];
 
     public function user()
     {

@@ -9,7 +9,9 @@ class ExtracurricularActivity extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'name', 'days_per_week'];
+    protected $fillable = ['user_id', 'name', 'schedule', 'days_per_week'];
+
+    protected $casts = ['schedule' => 'array'];
 
     public function user()
     {
