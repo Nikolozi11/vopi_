@@ -2,13 +2,15 @@
      x-data="{ darkMode: localStorage.getItem('darkMode') === 'true' || document.documentElement.classList.contains('dark') }"
      x-init="setInterval(() => darkMode = localStorage.getItem('darkMode') === 'true' || document.documentElement.classList.contains('dark'), 150)"
      :class="darkMode ? 'bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900'">
+    @include('livewire.partials.ui-fixes')
+
     <div class="max-w-xl mx-auto">
         <div class="flex items-center justify-between mb-6">
             <h1 class="text-2xl font-extrabold">ჩემი პროფილი</h1>
             <a href="/dashboard" class="text-sm font-semibold" :class="darkMode ? 'text-indigo-400' : 'text-indigo-600'">← განრიგი</a>
         </div>
 
-        <div class="p-6 rounded-3xl border space-y-5" :class="darkMode ? 'bg-slate-900/90 border-slate-800/80' : 'bg-white border-slate-100 shadow-xl'">
+        <div class="p-4 sm:p-6 rounded-3xl border space-y-5" :class="darkMode ? 'bg-slate-900/90 border-slate-800/80' : 'bg-white border-slate-100 shadow-xl'">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-xs font-semibold mb-2" :class="darkMode ? 'text-slate-400' : 'text-slate-600'">სწავლის დრო (სთ/დღე)</label>

@@ -45,13 +45,13 @@
                     @endif
                 </div>
                 @foreach($act['schedule'] as $j => $slot)
-                    <div wire:key="act-{{ $i }}-{{ $j }}" class="flex items-center gap-1.5">
+                    <div wire:key="act-{{ $i }}-{{ $j }}" class="flex flex-wrap items-center gap-1.5">
                         <select wire:model="activities.{{ $i }}.schedule.{{ $j }}.day" class="{{ $in }} !w-auto" :class="darkMode ? 'bg-slate-900 border-slate-800 text-white' : 'bg-white border-slate-200 text-slate-900'">
                             @foreach($days as $n => $label) <option value="{{ $n }}">{{ mb_substr($label, 0, 3) }}</option> @endforeach
                         </select>
-                        <input type="time" wire:model="activities.{{ $i }}.schedule.{{ $j }}.start" class="{{ $in }}" :class="darkMode ? 'bg-slate-900 border-slate-800 text-white' : 'bg-white border-slate-200 text-slate-900'">
+                        <input type="time" wire:model="activities.{{ $i }}.schedule.{{ $j }}.start" class="{{ $in }} !w-auto flex-1 min-w-[6.5rem]" :class="darkMode ? 'bg-slate-900 border-slate-800 text-white' : 'bg-white border-slate-200 text-slate-900'">
                         <span class="text-xs">–</span>
-                        <input type="time" wire:model="activities.{{ $i }}.schedule.{{ $j }}.end" class="{{ $in }}" :class="darkMode ? 'bg-slate-900 border-slate-800 text-white' : 'bg-white border-slate-200 text-slate-900'">
+                        <input type="time" wire:model="activities.{{ $i }}.schedule.{{ $j }}.end" class="{{ $in }} !w-auto flex-1 min-w-[6.5rem]" :class="darkMode ? 'bg-slate-900 border-slate-800 text-white' : 'bg-white border-slate-200 text-slate-900'">
                         @if(count($act['schedule']) > 1)
                             <button type="button" wire:click="removeSlot('activities', {{ $i }}, {{ $j }})" class="text-rose-500 font-bold px-1">&times;</button>
                         @endif
@@ -68,7 +68,7 @@
 <div class="border-t pt-4" :class="darkMode ? 'border-slate-800' : 'border-slate-100'">
     <div class="flex items-center justify-between mb-3">
         <label class="flex items-center gap-3 cursor-pointer select-none">
-            <input type="checkbox" wire:model.live="has_tutor" class="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500">
+            <input type="checkbox" wire:model.live="has_tutor" class="vp-switch" aria-label="გყავს რეპეტიტორი?">
             <span class="text-xs font-bold uppercase tracking-wider" :class="darkMode ? 'text-slate-300' : 'text-slate-700'"><span class="inline-flex items-center gap-2"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/></svg>გყავს რეპეტიტორი?</span></span>
         </label>
         @if($has_tutor)
@@ -86,13 +86,13 @@
                         @endif
                     </div>
                     @foreach($tutor['schedule'] as $j => $slot)
-                        <div wire:key="tut-{{ $i }}-{{ $j }}" class="flex items-center gap-1.5">
+                        <div wire:key="tut-{{ $i }}-{{ $j }}" class="flex flex-wrap items-center gap-1.5">
                             <select wire:model="tutors.{{ $i }}.schedule.{{ $j }}.day" class="{{ $in }} !w-auto" :class="darkMode ? 'bg-slate-900 border-slate-800 text-white' : 'bg-white border-slate-200 text-slate-900'">
                                 @foreach($days as $n => $label) <option value="{{ $n }}">{{ mb_substr($label, 0, 3) }}</option> @endforeach
                             </select>
-                            <input type="time" wire:model="tutors.{{ $i }}.schedule.{{ $j }}.start" class="{{ $in }}" :class="darkMode ? 'bg-slate-900 border-slate-800 text-white' : 'bg-white border-slate-200 text-slate-900'">
+                            <input type="time" wire:model="tutors.{{ $i }}.schedule.{{ $j }}.start" class="{{ $in }} !w-auto flex-1 min-w-[6.5rem]" :class="darkMode ? 'bg-slate-900 border-slate-800 text-white' : 'bg-white border-slate-200 text-slate-900'">
                             <span class="text-xs">–</span>
-                            <input type="time" wire:model="tutors.{{ $i }}.schedule.{{ $j }}.end" class="{{ $in }}" :class="darkMode ? 'bg-slate-900 border-slate-800 text-white' : 'bg-white border-slate-200 text-slate-900'">
+                            <input type="time" wire:model="tutors.{{ $i }}.schedule.{{ $j }}.end" class="{{ $in }} !w-auto flex-1 min-w-[6.5rem]" :class="darkMode ? 'bg-slate-900 border-slate-800 text-white' : 'bg-white border-slate-200 text-slate-900'">
                             @if(count($tutor['schedule']) > 1)
                                 <button type="button" wire:click="removeSlot('tutors', {{ $i }}, {{ $j }})" class="text-rose-500 font-bold px-1">&times;</button>
                             @endif

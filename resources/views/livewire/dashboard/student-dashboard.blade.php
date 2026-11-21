@@ -1,4 +1,4 @@
-<div class="min-h-screen relative pb-24 transition-colors duration-200"
+<div class="min-h-screen relative pb-32 sm:pb-24 transition-colors duration-200"
      x-data="{ 
          darkMode: localStorage.getItem('darkMode') === 'true' || document.documentElement.classList.contains('dark'),
          updateTheme() {
@@ -10,15 +10,17 @@
          window.addEventListener('storage', () => updateTheme());
      "
      :class="darkMode ? 'bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900'">
+    @include('livewire.partials.ui-fixes')
+
 
     {{-- Main Content Grid --}}
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 sm:mt-8 grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 sm:mt-8 grid grid-cols-1 lg:grid-cols-3 gap-5 sm:gap-8">
 
         {{-- მარცხენა სვეტი --}}
-        <div class="space-y-6">
+        <div class="space-y-5 sm:space-y-6">
 
             {{-- AI პროფილის ბარათი --}}
-            <div class="border border-indigo-500/20 text-white rounded-3xl p-6 shadow-xl transition-colors"
+            <div class="border border-indigo-500/20 text-white rounded-3xl p-4 sm:p-6 shadow-xl transition-colors"
                  :class="darkMode ? 'bg-gradient-to-br from-indigo-950 via-slate-900 to-slate-900 shadow-black/40' : 'bg-gradient-to-br from-indigo-900 to-indigo-700 shadow-lg'">
                 <h3 class="font-bold text-base mb-2 flex items-center space-x-2 text-indigo-200">
                     <img src="/images/logo.png" alt="AI Assistant" class="w-6 h-6"> <span>შენი AI პროფილი</span>
@@ -41,7 +43,7 @@
             </div>
 
             {{-- დავალების ჩანიშვნის ფორმა --}}
-            <div class="backdrop-blur-xl p-6 rounded-3xl border shadow-xl transition-colors"
+            <div class="backdrop-blur-xl p-4 sm:p-6 rounded-3xl border shadow-xl transition-colors"
                  :class="darkMode ? 'bg-slate-900/90 border-slate-800/80 text-white shadow-2xl shadow-black/50' : 'bg-white border-slate-100 text-slate-900 shadow-xl'">
                 <h3 class="font-bold text-base mb-4 transition-colors" :class="darkMode ? 'text-white' : 'text-slate-900'">{{ $editingId ? 'დავალების რედაქტირება' : 'დავალების ჩანიშვნა' }}</h3>
                 <form wire:submit="saveTask" class="space-y-4">
@@ -67,7 +69,7 @@
                         </select>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-3">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
                             <label class="block text-xs font-semibold uppercase tracking-wider mb-2 transition-colors" :class="darkMode ? 'text-slate-400' : 'text-slate-600'">დასაწყისი</label>
                             <input type="datetime-local" wire:model="start_time" class="w-full px-3 py-2.5 border rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" :class="darkMode ? 'bg-slate-950/60 border-slate-800 text-white' : 'bg-slate-50 border-slate-200 text-slate-900'">
@@ -102,7 +104,7 @@
             </div>
 
             {{-- მაღვიძარას და ფუშ-შეტყობინებების ბარათი --}}
-            <div class="backdrop-blur-xl p-6 rounded-3xl border shadow-xl transition-colors"
+            <div class="backdrop-blur-xl p-4 sm:p-6 rounded-3xl border shadow-xl transition-colors"
                  :class="darkMode ? 'bg-slate-900/90 border-slate-800/80 text-white shadow-2xl shadow-black/50' : 'bg-white border-slate-100 text-slate-900 shadow-xl'">
                  <h3 class="font-bold text-base mb-3 transition-colors flex items-center gap-2" :class="darkMode ? 'text-white' : 'text-slate-900'">
     <svg class="w-5 h-5 text-indigo-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
@@ -114,22 +116,16 @@
                 <p class="text-xs mb-4 transition-colors" :class="darkMode ? 'text-slate-400' : 'text-slate-600'">ჩართე მაღვიძარა, რომ ტელეფონიდან გასვლისასაც მიიღო შეტყობინება.</p>
                 
                 <label class="flex items-center space-x-3 cursor-pointer">
-                    <input 
-                        type="checkbox" 
-                        wire:model="pushEnabled" 
-                        onchange="togglePushAlarm(this)"
-                        class="w-5 h-5 rounded border text-indigo-600 focus:ring-indigo-500 cursor-pointer"
-                        :class="darkMode ? 'border-slate-800 bg-slate-950' : 'border-slate-300 bg-white'"
-                    >
+                    <input type="checkbox" wire:model="pushEnabled" onchange="togglePushAlarm(this)" class="vp-switch" aria-label="ფუშ მაღვიძარას ჩართვა">
                     <span class="text-sm font-medium" :class="darkMode ? 'text-white' : 'text-slate-900'">ფუშ მაღვიძარას ჩართვა</span>
                 </label>
             </div>
         </div>
 
         {{-- მარჯვენა სვეტი: დღის განრიგი --}}
-        <div class="backdrop-blur-xl rounded-3xl border shadow-xl p-6 lg:col-span-2 transition-colors"
+        <div class="backdrop-blur-xl rounded-3xl border shadow-xl p-4 sm:p-6 lg:col-span-2 transition-colors"
              :class="darkMode ? 'bg-slate-900/90 border-slate-800/80 text-white shadow-2xl shadow-black/50' : 'bg-white border-slate-100 text-slate-900 shadow-xl'">
-            <h3 class="font-bold text-base sm:text-lg mb-6 flex items-center justify-between transition-colors" :class="darkMode ? 'text-white' : 'text-slate-900'">
+            <h3 class="font-bold text-base sm:text-lg mb-5 sm:mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3 transition-colors" :class="darkMode ? 'text-white' : 'text-slate-900'">
                 <span class="inline-flex items-center gap-2">
     <svg class="w-5 h-5 text-indigo-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
         <path d="M8 2v4"/>
@@ -139,7 +135,7 @@
     </svg>
     დავალებებისა და გაკვეთილების განრიგი
 </span>
-                <span class="text-xs font-normal flex items-center gap-3" :class="darkMode ? 'text-slate-400' : 'text-slate-500'">
+                <span class="text-xs font-normal flex items-center justify-between sm:justify-start gap-3 w-full sm:w-auto" :class="darkMode ? 'text-slate-400' : 'text-slate-500'">
                     <button wire:click="deleteCompleted" wire:confirm="წავშალოთ ყველა შესრულებული?" class="text-rose-500 hover:underline">შესრულებულების წაშლა</button>
                     {{ now()->format('Y-m-d') }}
                 </span>
@@ -147,11 +143,11 @@
 
             <div class="space-y-3.5">
                 @forelse($tasks as $task)
-                    <div wire:key="task-{{ $task->id }}" class="flex items-start p-4 rounded-2xl border transition-all {{ $task->is_completed ? 'opacity-50' : '' }}"
+                    <div wire:key="task-{{ $task->id }}" class="flex flex-wrap sm:flex-nowrap items-start p-3 sm:p-4 rounded-2xl border transition-all {{ $task->is_completed ? 'opacity-50' : '' }}"
                          :class="darkMode ? ($task->is_completed ? 'bg-slate-950/40 border-slate-800/60' : 'bg-slate-950/60 border-slate-800 hover:border-slate-700') : ($task->is_completed ? 'bg-slate-100 border-slate-200' : 'bg-slate-50/60 border-slate-200 hover:border-slate-300')">
-                        <input type="checkbox" wire:click="toggleTaskCompletion({{ $task->id }})" {{ $task->is_completed ? 'checked' : '' }} class="mt-1 w-5 h-5 rounded border text-indigo-600 focus:ring-indigo-500 cursor-pointer" :class="darkMode ? 'border-slate-800 bg-slate-950' : 'border-slate-300 bg-white'">
+                        <input type="checkbox" wire:click="toggleTaskCompletion({{ $task->id }})" {{ $task->is_completed ? 'checked' : '' }} class="vp-check vp-round mt-0.5" aria-label="შესრულებულია">
 
-                        <div class="ml-4 flex-1">
+                        <div class="ml-3 sm:ml-4 flex-1 min-w-0 break-words">
                             <h4 class="text-sm font-bold {{ $task->is_completed ? 'line-through' : '' }}"
                                 :class="darkMode ? ($task->is_completed ? 'text-slate-500' : 'text-white') : ($task->is_completed ? 'text-slate-400' : 'text-slate-900')">
                                 {{ $task->title }}
@@ -172,7 +168,7 @@
 </p>
                         </div>
 
-                        <div class="flex flex-col items-end gap-2">
+                        <div class="w-full sm:w-auto mt-2 sm:mt-0 pl-8 sm:pl-0 flex flex-row sm:flex-col items-center sm:items-end justify-between sm:gap-2">
                         <span class="px-3 py-1 rounded-full text-xs font-semibold border"
                             :class="darkMode ? (
                                 '{{ $task->type }}' === 'school_task' ? 'bg-indigo-600/10 text-indigo-400 border-indigo-500/20' :
@@ -192,8 +188,8 @@
                             } }}
                         </span>
                         <div class="flex gap-3 text-xs">
-                            <button wire:click="editTask({{ $task->id }})" class="text-indigo-500 hover:text-indigo-400 p-1" aria-label="რედაქტირება" title="რედაქტირება"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button>
-                            <button wire:click="deleteTask({{ $task->id }})" wire:confirm="წავშალოთ დავალება?" class="text-rose-500 hover:text-rose-400 p-1" aria-label="წაშლა" title="წაშლა"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/></svg></button>
+                            <button wire:click="editTask({{ $task->id }})" class="text-indigo-500 hover:text-indigo-400 p-2.5 sm:p-1" aria-label="რედაქტირება" title="რედაქტირება"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button>
+                            <button wire:click="deleteTask({{ $task->id }})" wire:confirm="წავშალოთ დავალება?" class="text-rose-500 hover:text-rose-400 p-2.5 sm:p-1" aria-label="წაშლა" title="წაშლა"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/></svg></button>
                         </div>
                         </div>
                     </div>
@@ -207,7 +203,7 @@
     </main>
 
     {{-- მცურავი AI ჩატის ღილაკი --}}
-    <button wire:click="toggleChat" class="fixed bottom-6 right-6 h-14 w-14 rounded-full bg-indigo-600 text-white shadow-2xl shadow-indigo-600/50 hover:bg-indigo-500 flex items-center justify-center text-2xl transition transform hover:scale-105 z-50">
+    <button wire:click="toggleChat" class="{{ $isChatOpen ? 'max-sm:hidden' : '' }} fixed right-4 sm:right-6 bottom-[calc(1.25rem+env(safe-area-inset-bottom))] sm:bottom-6 h-14 w-14 rounded-full bg-indigo-600 text-white shadow-2xl shadow-indigo-600/50 hover:bg-indigo-500 flex items-center justify-center text-2xl transition transform hover:scale-105 z-[9998]">
         <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
     <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>
     <path d="M8 12h.01"/>
@@ -218,14 +214,14 @@
 
     {{-- AI ჩატი --}}
     @if($isChatOpen)
-        <div class="fixed bottom-24 right-4 sm:right-6 w-[calc(100vw-2rem)] sm:w-96 rounded-3xl shadow-2xl border z-50 overflow-hidden flex flex-col h-[480px] transition-colors"
+        <div class="fixed inset-x-2 bottom-2 sm:inset-x-auto sm:bottom-24 sm:right-6 sm:w-96 h-[calc(100dvh-4.5rem)] max-h-[680px] sm:h-[480px] rounded-3xl shadow-2xl border z-[9999] overflow-hidden flex flex-col transition-colors pb-[env(safe-area-inset-bottom)]"
              :class="darkMode ? 'bg-slate-900 border-slate-800 shadow-black/60' : 'bg-white border-slate-200 shadow-xl'">
             <div class="bg-indigo-600 p-4 text-white flex justify-between items-center shadow-md">
                 <div class="flex items-center space-x-2">
                     <img src="/images/logo.png" alt="AI Assistant" class="w-6 h-6">
                     <span class="font-bold text-sm">AI ასისტენტი & დაგეგმვა</span>
                 </div>
-                <button wire:click="toggleChat" class="text-white hover:text-slate-200 text-xl font-bold">&times;</button>
+                <button wire:click="toggleChat" class="text-white hover:text-slate-200 text-2xl leading-none font-bold px-2 py-1" aria-label="დახურვა">&times;</button>
             </div>
 
             <div id="chat-scroll" class="flex-1 p-4 overflow-y-auto space-y-3 transition-colors" :class="darkMode ? 'bg-slate-950/60' : 'bg-slate-50/50'">
@@ -255,14 +251,14 @@
                             <img src="{{ $photo->temporaryUrl() }}" alt="არჩეული ფოტო" class="w-16 h-16 rounded-xl object-cover border border-slate-500/30">
                         @endif
                         <span class="flex-1 text-xs text-indigo-500">ფოტო მზადაა გასაგზავნად</span>
-                        <button type="button" wire:click="$set('photo', null)" class="p-1 text-slate-400 hover:text-rose-500" aria-label="ფოტოს მოხსნა"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+                        <button type="button" wire:click="removePhoto" class="p-1 text-slate-400 hover:text-rose-500" aria-label="ფოტოს მოხსნა"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
                     </div>
                 @endif
                 <div wire:loading wire:target="photo" class="text-[11px] mb-2 text-slate-500">ფოტო იტვირთება...</div>
                 @error('photo') <div class="text-[11px] mb-2 text-rose-500">{{ $message }}</div> @enderror
                 <div class="flex items-center gap-2">
                     <label class="cursor-pointer p-2 rounded-xl text-slate-400 hover:text-indigo-400 transition-colors" title="ფოტოს ატვირთვა" aria-label="ფოტოს ატვირთვა"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3Z"/><circle cx="12" cy="13" r="3"/></svg>
-                        <input type="file" wire:model="photo" accept="image/*" class="hidden">
+                        <input type="file" accept="image/*" class="hidden" @change="pick($event)">
                     </label>
                     <button type="button" x-show="supported" @click="toggle()" :class="listening ? 'animate-pulse bg-rose-500 text-white' : 'text-slate-400 hover:text-indigo-400'" class="p-2 rounded-xl transition-colors" title="ხმით საუბარი" aria-label="ხმით საუბარი"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v4"/></svg></button>
                     <input type="text" wire:model="aiMessage" wire:keydown.enter="sendMessageToAi" placeholder="ჩაწერე ან თქვი დავალება..." class="flex-1 min-w-0 px-4 py-2.5 border rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors" :class="darkMode ? 'bg-slate-950 border-slate-800 text-white placeholder-slate-600' : 'bg-slate-50 border-slate-200 text-slate-900 placeholder-slate-400'">
@@ -283,12 +279,39 @@
             });
         });
 
+        // ფოტოს დამცირება ბრაუზერში (სწრაფი ატვირთვა + მინიატურა, GD არ სჭირდება)
+        async function resizeImage(file, max, quality) {
+            let bmp;
+            try { bmp = await createImageBitmap(file, { imageOrientation: 'from-image' }); }
+            catch (e) { bmp = await new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = URL.createObjectURL(file); }); }
+            const w = bmp.width, h = bmp.height, k = Math.min(1, max / Math.max(w, h));
+            const c = document.createElement('canvas');
+            c.width = Math.max(1, Math.round(w * k)); c.height = Math.max(1, Math.round(h * k));
+            const ctx = c.getContext('2d');
+            ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, c.width, c.height);
+            ctx.drawImage(bmp, 0, 0, c.width, c.height);
+            return new Promise((res) => c.toBlob(res, 'image/jpeg', quality));
+        }
+
         function voiceInput() {
             const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
             return {
                 supported: !!SR,
                 listening: false,
                 rec: null,
+                async pick(e) {
+                    const f = e.target.files[0];
+                    if (!f) return;
+                    try {
+                        const [big, small] = await Promise.all([resizeImage(f, 1600, 0.85), resizeImage(f, 240, 0.72)]);
+                        const thumb = await new Promise((r) => { const fr = new FileReader(); fr.onload = () => r(fr.result); fr.readAsDataURL(small); });
+                        this.$wire.set('photoThumb', thumb, false);
+                        this.$wire.upload('photo', new File([big], 'photo.jpg', { type: 'image/jpeg' }));
+                    } catch (err) {
+                        this.$wire.upload('photo', f);   // თუ დამცირება ვერ მოხერხდა, ორიგინალი ავტვირთოთ
+                    }
+                    e.target.value = '';
+                },
                 toggle() {
                     if (this.listening) { this.rec && this.rec.stop(); return; }
                     this.rec = new SR();
@@ -306,6 +329,21 @@
                 },
             };
         }
+
+        // გვერდის ჩატვირთვისას ვამოწმებთ ამ მოწყობილობის რეალურ გამოწერას და გადამრთველი ამას იმახსოვრებს
+        async function syncPushState() {
+            const cb = document.querySelector('input[onchange="togglePushAlarm(this)"]');
+            if (!cb || !('serviceWorker' in navigator) || !('PushManager' in window)) return;
+            try {
+                const reg = await navigator.serviceWorker.ready;
+                const sub = await reg.pushManager.getSubscription();
+                const on = !!sub && Notification.permission === 'granted';
+                cb.checked = on;
+                await @this.set('pushEnabled', on, false);
+                if (on) await @this.call('savePushSubscription', sub.toJSON());
+            } catch (e) { console.error(e); }
+        }
+        document.addEventListener('livewire:initialized', () => setTimeout(syncPushState, 200));
 
         async function togglePushAlarm(checkbox) {
             try {

@@ -1,3 +1,5 @@
+importScripts('/vopi-push-handler.js');
+
 self.addEventListener('install', (event) => {
     self.skipWaiting();
 });

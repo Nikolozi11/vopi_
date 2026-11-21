@@ -33,6 +33,7 @@ class StudentDashboard extends Component
     public bool $isChatOpen = false;
     public string $aiMessage = '';
     public $photo = null;
+    public string $photoThumb = '';   // მინიატურა (data URI), ბრაუზერში მზადდება
     public bool $pushEnabled = false;
     public int $daysShown = 7;
 
@@ -91,7 +92,8 @@ class StudentDashboard extends Component
         ];
 
         if ($this->editingId) {
-            $data['notified_at'] = null; // დროის შეცვლისას შეხსენება თავიდან გაიგზავნოს
+            // დროის შეცვლისას მაღვიძარა თავიდან გაიგზავნოს
+            $data += ['notified_at' => null, 'start_notified_at' => null, 'notify_count' => 0];
             Task::where('user_id', Auth::id())->findOrFail($this->editingId)->update($data);
         } else {
             Task::create($data + ['user_id' => Auth::id(), 'is_completed' => false]);
@@ -199,11 +201,12 @@ class StudentDashboard extends Component
         $imageUri = null;
         $thumb = null;
         if ($hasPhoto) {
-            $thumb = $this->makeThumbnail($this->photo->getRealPath());
+            $thumb = $this->validThumb($this->photoThumb) ?? $this->makeThumbnail($this->photo->getRealPath());
             $imageUri = 'data:' . $this->photo->getMimeType() . ';base64,' . base64_encode(file_get_contents($this->photo->getRealPath()));
             $this->photo->delete();
             $this->photo = null;
         }
+        $this->photoThumb = '';
 
         $shown = $text !== '' ? $text : 'გავაგზავნე გრაფიკის ფოტო';
         $this->chatHistory[] = ['sender' => 'user', 'text' => $shown, 'image' => $thumb];
@@ -232,7 +235,21 @@ class StudentDashboard extends Component
         $this->chatHistory[] = ['sender' => 'ai', 'text' => $reply];
     }
 
-    /** პატარა JPEG მინიატურა ჩატისთვის (ორიგინალი სერვერზე არ რჩება) */
+    public function removePhoto(): void
+    {
+        if ($this->photo) {
+            $this->photo->delete();
+        }
+        $this->photo = null;
+        $this->photoThumb = '';
+    }
+
+    private function validThumb(string $uri): ?string
+    {
+        return strlen($uri) <= 80000 && preg_match('#^data:image/jpeg;base64,[A-Za-z0-9+/=]+$#', $uri) ? $uri : null;
+    }
+
+    /** პატარა JPEG მინიატურა ჩატისთვის (GD-ზე, თუ ბრაუზერისა არ არის) (ორიგინალი სერვერზე არ რჩება) */
     private function makeThumbnail(string $path, int $max = 240): ?string
     {
         if (! function_exists('imagecreatefromstring')) {
